@@ -70,11 +70,17 @@ def getHashAndRename(songFolderName):
     if songId == "ERROR":
         moveMapToDeletedFolder(songFolderName)
         return
-    log.write('Renamed: ' + songFolderName + '\n')
-    os.rename(songFolderName, songId + " (" + songFolderName + ")")
-    songFolderName = songId + " (" + songFolderName + ")"
-    if int(songId, 16) < DELETENUM:
+
+    if not os.path.exists(songId + " (" + songFolderName + ")"):
+        log.write('Renamed: ' + songFolderName + '\n')
+        os.rename(songFolderName, songId + " (" + songFolderName + ")")
+    else:
+        log.write('Duplicate of '+songFolderName +' found, deleted as a result\n')
         moveMapToDeletedFolder(songFolderName)
+        return
+
+    if int(songId, 16) < DELETENUM:
+        moveMapToDeletedFolder(songId + " (" + songFolderName + ")")
 
 # if the song is too old or the songId is not accessible, this method is called to move it to the DELETEDMAPS folder
 def moveMapToDeletedFolder(songFolderName):
