@@ -70,6 +70,7 @@ def getHashAndRename(songFolderName):
     if songId == "ERROR":
         moveMapToDeletedFolder(songFolderName)
         return
+    log.write('Renamed: ' + songFolderName + '\n')
     os.rename(songFolderName, songId + " (" + songFolderName + ")")
     songFolderName = songId + " (" + songFolderName + ")"
     if int(songId, 16) < DELETENUM:
@@ -80,6 +81,7 @@ def moveMapToDeletedFolder(songFolderName):
     if os.path.exists('DELETEDMAPS\\' + songFolderName):
         shutil.rmtree('DELETEDMAPS\\' + songFolderName)
     shutil.move(songFolderName, 'DELETEDMAPS\\' + songFolderName)
+    log.write('Deleted: '+songFolderName+'\n')
 
 
 # oldest song id you are willing to keep
@@ -87,7 +89,7 @@ DELETENUM = int('29a8', 16)
 songFolderList = os.listdir()
 if not os.path.exists('DELETEDMAPS'):
     os.mkdir('DELETEDMAPS')
-
+log = open('DELETEDMAPS\\log.txt', 'w+')
 for songFolderName in songFolderList:
     # if statement makes sure program does not delete itself and the DELETEDMAPS folder
     if os.path.isdir(songFolderName) and songFolderName not in 'DELETEDMAPS':
